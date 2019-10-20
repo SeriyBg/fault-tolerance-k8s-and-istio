@@ -1,0 +1,45 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: event-service
+spec:
+  host: event-service
+  subsets:
+    - name: v1
+      labels:
+        version: "1.0"
+    - name: v2
+      labels:
+        version: "2.0"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: event-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /event
+          headers:
+            user:
+              regex: ".*NASA.*"
+      route:
+        - destination:
+            host: event-service
+            subset: v2
+            port:
+              number: 8080
+    - match:
+        - uri:
+            prefix: /event
+      route:
+        - destination:
+            host: event-service
+            subset: v1
+            port:
+              number: 8080

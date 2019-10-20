@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fanout-ingress
+  annotations:
+    kubernetes.io/ingress.class: gce
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /event/*
+            backend:
+              serviceName: event-service
+              servicePort: 8080
+          - path: /player/*
+            backend:
+              serviceName: player-service
+              servicePort: 8081
+          - path: /groundevent/*
+            backend:
+              serviceName: ground-event-service
+              servicePort: 8082
+          - path: /*
+            backend:
+              serviceName: explorer-ui
+              servicePort: 80

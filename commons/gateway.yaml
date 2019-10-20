@@ -1,0 +1,94 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: explorer-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: event-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /event
+      route:
+        - destination:
+            host: event-service
+            port:
+              number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: player-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /player
+      route:
+        - destination:
+            host: player-service
+            port:
+              number: 8081
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ground-event-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /groundevent
+      route:
+        - destination:
+            host: ground-event-service
+            port:
+              number: 8082
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ui-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /
+      headers:
+        response:
+          set:
+            Cache-Control: "no-cache, no-store, must-revalidate"
+      route:
+        - destination:
+            host: explorer-ui
+            port:
+              number: 80

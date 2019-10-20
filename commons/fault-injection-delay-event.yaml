@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: event-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /event
+      route:
+        - destination:
+            host: event-service
+            port:
+              number: 8080
+      fault:
+        delay:
+          fixedDelay: 10s
+          percent: 100

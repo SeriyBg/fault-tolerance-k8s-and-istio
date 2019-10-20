@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: player-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /player
+      route:
+        - destination:
+            host: player-service
+            port:
+              number: 8081
+      retries:
+        attempts: 5
+        perTryTimeout: 2s
+        retryOn: 5xx

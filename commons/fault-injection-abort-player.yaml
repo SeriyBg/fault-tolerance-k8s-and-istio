@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: player-default
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - explorer-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /player/leaderboard
+      route:
+        - destination:
+            host: player-service
+            port:
+              number: 8081
+      fault:
+        abort:
+          httpStatus: 500
+          percent: 50
+    - match:
+        - uri:
+            prefix: /player
+      route:
+        - destination:
+            host: player-service
+            port:
+              number: 8081

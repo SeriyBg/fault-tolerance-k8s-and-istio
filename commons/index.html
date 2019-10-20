@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Explorer Game</title>
+</head>
+<body>
+<div id = "thegame"></div>
+<script type="text/javascript">
+    setInterval(function() {
+        const axiosOptions = {
+            method: 'GET',
+            url: "http://localhost:8080/event/meteor",
+        }
+        let response = axios(axiosOptions).then(data => {
+            console.log(data.data);
+            $('#thegame').text(JSON.stringify(data.data));
+        });
+    }, 1000)
+</script>
+</body>
+</html>

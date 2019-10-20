@@ -1,0 +1,12 @@
+[submodule "event-service"]
+	path = event-service
+	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/event-service
+[submodule "explorer-ui"]
+	path = explorer-ui
+	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/explorer-ui
+[submodule "player-service"]
+	path = player-service
+	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/player-service
+[submodule "ground-event-service"]
+	path = ground-event-service
+	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/ground-event-service
