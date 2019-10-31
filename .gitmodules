@@ -1,6 +1,6 @@
 [submodule "event-service"]
 	path = event-service
-	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/event-service
+	url = git@github.com:SeriyBg/event-service.git
 [submodule "explorer-ui"]
 	path = explorer-ui
 	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/explorer-ui
