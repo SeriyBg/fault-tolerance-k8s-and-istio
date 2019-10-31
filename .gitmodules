@@ -3,10 +3,10 @@
 	url = git@github.com:SeriyBg/event-service.git
 [submodule "explorer-ui"]
 	path = explorer-ui
-	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/explorer-ui
+	url = git@github.com:SeriyBg/explorer-ui.git
 [submodule "player-service"]
 	path = player-service
-	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/player-service
+	url = git@github.com:SeriyBg/player-service.git
 [submodule "ground-event-service"]
 	path = ground-event-service
-	url = /Users/sbishhyr/IdeaProjects/fault-tolerance-k8s-istio/ground-event-service
+	url = git@github.com:SeriyBg/ground-event-service.git
