@@ -1,16 +1,16 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: event-default
+  name: event-timeout
 spec:
   hosts:
-    - "*"
-  gateways:
-    - explorer-gateway
+    - event-service
   http:
     - match:
         - uri:
             prefix: /event
+          sourceLabels:
+            app: ground-event-service
       route:
         - destination:
             host: event-service
