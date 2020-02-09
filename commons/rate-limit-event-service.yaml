@@ -20,13 +20,6 @@ spec:
           premium: "true"
         maxAmount: 500
         validDuration: 1s
-      # The following override applies to 'productpage' when
-      # the source is a specific ip address.
-      - dimensions:
-          destination: event-service
-          source: "10.28.11.20"
-        maxAmount: 500
-        validDuration: 1s
 ---
 apiVersion: config.istio.io/v1alpha2
 kind: instance
@@ -37,7 +30,7 @@ spec:
   compiledTemplate: quota
   params:
     dimensions:
-      premium: conditional("SpaceX".matches(request.headers["user"]), "true", "false")
+      premium: conditional(".*SpaceX.*".matches(request.headers["user"]), "true", "false")
       destination: destination.labels["app"] | destination.service.name | "unknown"
 ---
 apiVersion: config.istio.io/v1alpha2
@@ -63,7 +56,7 @@ spec:
   services:
   - name: event-service
     namespace: default
-  # - service: '*'  # Uncomment this to bind *all* services to request-count
+#   - service: '*'  # Uncomment this to bind *all* services to request-count
 ---
 apiVersion: config.istio.io/v1alpha2
 kind: rule
