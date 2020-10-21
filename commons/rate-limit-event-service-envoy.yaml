@@ -1,0 +1,82 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: filter-ratelimit
+  namespace: istio-system
+spec:
+  workloadSelector:
+    # select by label in the same namespace
+    labels:
+      istio: ingressgateway
+  configPatches:
+      # The Envoy config you want to modify
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+         name: envoy.rate_limit
+         config:
+           # domain can be anything! Match it to the ratelimter service config
+           domain: test
+           rate_limit_service:
+             grpc_service:
+               envoy_grpc:
+                 cluster_name: rate_limit_service
+               timeout: 0.25s
+    - applyTo: CLUSTER
+      match:
+        cluster:
+          service: ratelimit.default.svc.cluster.local
+      patch:
+        operation: ADD
+        value:
+          name: rate_limit_service
+          type: STRICT_DNS
+          connect_timeout: 0.25s
+          lb_policy: ROUND_ROBIN
+          http2_protocol_options: {}
+          hosts:
+            - socket_address:
+                address: ratelimit.default.svc.cluster.local
+                port_value: 8081
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: filter-ratelimit-svc
+  namespace: istio-system
+spec:
+  workloadSelector:
+    labels:
+      istio: ingressgateway
+  configPatches:
+    - applyTo: VIRTUAL_HOST
+      match:
+        context: GATEWAY
+        routeConfiguration:
+          vhost:
+            name: "*:80"
+            route:
+              action: ANY
+      patch:
+        operation: MERGE
+        value:
+          rate_limits:
+            - actions: # any actions in here
+                # Multiple actions nest the descriptors
+                # https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/rate_limit_filter#config-http-filters-rate-limit-composing-actions
+                # - generic_key:
+                    # descriptor_value: "test"
+                - request_headers:
+                    header_name: "user"
+                    descriptor_key: "user"
+                # - remote_address: {}
+                # - destination_cluster: {}
