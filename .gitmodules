@@ -4,9 +4,12 @@
 [submodule "explorer-ui"]
 	path = explorer-ui
 	url = git@github.com:SeriyBg/explorer-ui.git
+	branch = master
 [submodule "player-service"]
 	path = player-service
 	url = git@github.com:SeriyBg/player-service.git
+	branch = master
 [submodule "ground-event-service"]
 	path = ground-event-service
 	url = git@github.com:SeriyBg/ground-event-service.git
+	branch = master
