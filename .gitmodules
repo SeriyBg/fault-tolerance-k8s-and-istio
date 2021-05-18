@@ -1,6 +1,7 @@
 [submodule "event-service"]
 	path = event-service
 	url = git@github.com:SeriyBg/event-service.git
+	branch = master
 [submodule "explorer-ui"]
 	path = explorer-ui
 	url = git@github.com:SeriyBg/explorer-ui.git
